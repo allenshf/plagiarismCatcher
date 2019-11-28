@@ -36,13 +36,12 @@ void printQueue(queue<string> q){
     cout<<endl;
 }
 
-void getSequences(vector<string> &files, int n){
-    FILE *fptr;
+void getSequences(vector<string> &files, int n, string dir){
     for(string f:files) {
-        ifstream infile(f, ios::in);
-        fptr = fopen(f.c_str(),"r");
+        string fileLoc("./" + dir + "/" + f);
+        ifstream infile(fileLoc, ios::in);
         queue<string> sequence;
-        if (fptr == NULL) {
+        if (infile.fail()) {
             cout << "File doesn't exist" << endl;
         }
         else {
@@ -62,7 +61,6 @@ void getSequences(vector<string> &files, int n){
                 printQueue(sequence);
                 }
         }
-        fclose(fptr);
         infile.close();
     }
 }
@@ -72,10 +70,10 @@ int main()
 {
     string dir = string("sm_doc_set");
     vector<string> files = vector<string>();
-    int n = 5;
+    int n = 50;
 
     getdir(dir,files);
-    getSequences(files,n);
+    getSequences(files,n,dir);
 
     for (unsigned int i = 0;i < files.size();i++) {
         cout << i << files[i] << endl;
