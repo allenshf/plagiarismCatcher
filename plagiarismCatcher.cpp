@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+
 
 using namespace std;
 
@@ -18,7 +20,6 @@ int getdir (string dir, vector<string> &files)
         cout << "Error(" << errno << ") opening " << dir << endl;
         return errno;
     }
-
     while ((dirp = readdir(dp)) != NULL) {
         files.push_back(string(dirp->d_name));
     }
@@ -37,31 +38,33 @@ void printQueue(queue<string> q){
 }
 
 void getSequences(vector<string> &files, int n, string dir){
-    for(string f:files) {
-        string fileLoc("./" + dir + "/" + f);
-        ifstream infile(fileLoc, ios::in);
+    for(int fileInd = 0; fileInd < files.size(); fileInd++){
+        string fileLoc = ("./" + dir + "/" + files[fileInd]);
+        ifstream inFile(fileLoc.c_str(), fstream::in);
+        //inFile.open(fileLoc, ios_base::openmode mode = ios_base::in);
+        //inFile.open(fileLoc, ifstream::in);
         queue<string> sequence;
-        if (infile.fail()) {
+        if (inFile.fail()) {
             cout << "File doesn't exist" << endl;
         }
         else {
             for (int i = 0; i < n; i++) {
-                if (infile.peek() != EOF) {
+                if (inFile.peek() != EOF) {
                     string temp;
-                    infile >> temp;
+                    inFile >> temp;
                     sequence.push(temp);
                 }
             }
             printQueue(sequence);
-            while (infile.peek() != EOF) {
+            while (inFile.peek() != EOF) {
                 sequence.pop();
                 string temp;
-                infile >> temp;
+                inFile >> temp;
                 sequence.push(temp);
                 printQueue(sequence);
                 }
         }
-        infile.close();
+        inFile.close();
     }
 }
 
@@ -70,7 +73,7 @@ int main()
 {
     string dir = string("sm_doc_set");
     vector<string> files = vector<string>();
-    int n = 50;
+    int n = 6;
 
     getdir(dir,files);
     getSequences(files,n,dir);
