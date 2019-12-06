@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-
+#include "hashTable.h"
 
 using namespace std;
 
@@ -37,6 +37,18 @@ void printQueue(queue<string> q){
     cout<<endl;
 }
 
+string filterString(string word){
+    string cleaned;
+    for(int i = 0; i < word.size(); i++){
+        char temp = word.at(i);
+        if(temp >= 'a' && temp <= 'z')
+            cleaned += temp;
+        else if (temp >= 'A' && temp <= 'Z')
+            cleaned += tolower(temp);
+    }
+    return cleaned;
+}
+
 void getSequences(vector<string> &files, int n, string dir){
     for(int fileInd = 0; fileInd < files.size(); fileInd++){
         string fileLoc = ("./" + dir + "/" + files[fileInd]);
@@ -60,6 +72,7 @@ void getSequences(vector<string> &files, int n, string dir){
                 sequence.pop();
                 string temp;
                 inFile >> temp;
+                temp = filterString(temp);
                 sequence.push(temp);
                 printQueue(sequence);
                 }
