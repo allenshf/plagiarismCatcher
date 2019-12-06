@@ -68,7 +68,6 @@ void getSequences(vector<string> &files, int n, string dir){
     }
 }
 
-
 int main()
 {
     string dir = string("sm_doc_set");
